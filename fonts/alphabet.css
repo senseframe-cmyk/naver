@@ -1,0 +1,186 @@
+@font-face {
+  font-family: 'Montalk Alphabet Archivo Black';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(alphabet-01.ttf?v=lowercase) format('truetype');
+}
+@font-face {
+  font-family: 'Montalk Alphabet Arimo';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(alphabet-02.ttf?v=lowercase) format('truetype');
+}
+@font-face {
+  font-family: 'Montalk Alphabet Changa One';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(alphabet-03.ttf?v=lowercase) format('truetype');
+}
+@font-face {
+  font-family: 'Montalk Alphabet DM Sans';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url(alphabet-04.ttf?v=lowercase) format('truetype');
+}
+@font-face {
+  font-family: 'Montalk Alphabet Google Sans';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(alphabet-05.ttf?v=lowercase) format('truetype');
+}
+@font-face {
+  font-family: 'Montalk Alphabet Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(alphabet-06.ttf?v=lowercase) format('truetype');
+}
+@font-face {
+  font-family: 'Montalk Alphabet JetBrains Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(alphabet-07.ttf?v=lowercase) format('truetype');
+}
+@font-face {
+  font-family: 'Montalk Alphabet Lato';
+  font-style: italic;
+  font-weight: 700;
+  font-display: swap;
+  src: url(alphabet-08.ttf?v=lowercase) format('truetype');
+}
+@font-face {
+  font-family: 'Montalk Alphabet Manrope';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(alphabet-09.ttf?v=lowercase) format('truetype');
+}
+@font-face {
+  font-family: 'Montalk Alphabet Merriweather';
+  font-style: italic;
+  font-weight: 700;
+  font-stretch: normal;
+  font-display: swap;
+  src: url(alphabet-10.ttf?v=lowercase) format('truetype');
+}
+@font-face {
+  font-family: 'Montalk Alphabet Montserrat';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url(alphabet-11.ttf?v=lowercase) format('truetype');
+}
+@font-face {
+  font-family: 'Montalk Alphabet Noto Sans';
+  font-style: normal;
+  font-weight: 600;
+  font-stretch: normal;
+  font-display: swap;
+  src: url(alphabet-12.ttf?v=lowercase) format('truetype');
+}
+@font-face {
+  font-family: 'Montalk Alphabet Noto Sans JP';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(alphabet-13.ttf?v=lowercase) format('truetype');
+}
+@font-face {
+  font-family: 'Montalk Alphabet Nunito';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url(alphabet-14.ttf?v=lowercase) format('truetype');
+}
+@font-face {
+  font-family: 'Montalk Alphabet Open Sans';
+  font-style: normal;
+  font-weight: 700;
+  font-stretch: normal;
+  font-display: swap;
+  src: url(alphabet-15.ttf?v=lowercase) format('truetype');
+}
+@font-face {
+  font-family: 'Montalk Alphabet Oswald';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(alphabet-16.ttf?v=lowercase) format('truetype');
+}
+@font-face {
+  font-family: 'Montalk Alphabet Pattaya';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(alphabet-17.ttf?v=lowercase) format('truetype');
+}
+@font-face {
+  font-family: 'Montalk Alphabet Plus Jakarta Sans';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(alphabet-18.ttf?v=lowercase) format('truetype');
+}
+@font-face {
+  font-family: 'Montalk Alphabet Poppins';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(alphabet-19.ttf?v=lowercase) format('truetype');
+}
+@font-face {
+  font-family: 'Montalk Alphabet Roboto';
+  font-style: normal;
+  font-weight: 300;
+  font-stretch: normal;
+  font-display: swap;
+  src: url(alphabet-20.ttf?v=lowercase) format('truetype');
+}
+@font-face {
+  font-family: 'Montalk Alphabet Roboto Condensed';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url(alphabet-21.ttf?v=lowercase) format('truetype');
+}
+@font-face {
+  font-family: 'Montalk Alphabet Roboto Mono';
+  font-style: italic;
+  font-weight: 500;
+  font-display: swap;
+  src: url(alphabet-22.ttf?v=lowercase) format('truetype');
+}
+@font-face {
+  font-family: 'Montalk Alphabet Rubik';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(alphabet-23.ttf?v=lowercase) format('truetype');
+}
+@font-face {
+  font-family: 'Montalk Alphabet Russo One';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(alphabet-24.ttf?v=lowercase) format('truetype');
+}
+@font-face {
+  font-family: 'Montalk Alphabet Shadows Into Light';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(alphabet-25.ttf?v=lowercase) format('truetype');
+}
+@font-face {
+  font-family: 'Montalk Alphabet Smooch Sans';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url(alphabet-26.ttf?v=lowercase) format('truetype');
+}

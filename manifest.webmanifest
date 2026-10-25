@@ -1,0 +1,17 @@
+{
+  "name": "Montalk",
+  "short_name": "Montalk",
+  "lang": "ko",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#F4FFFE",
+  "icons": [
+    {
+      "src": "img/montalk-logo.png",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
