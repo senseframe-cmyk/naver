@@ -4,7 +4,7 @@
  let observers=[];
  const sheets={
   4:[
-   [0,'','첫만남 – 첫 행동 유도','- 알을 터치하는 간단한 행동으로 첫 상호작용 유도','- 캐릭터가 등장하는 과정을 통해 자연스럽게 서비스 진입'],
+   [0,'','첫 만남 – 첫 행동 유도','- 알을 터치하는 간단한 행동으로 첫 상호작용 유도','- 캐릭터가 등장하는 과정을 통해 자연스럽게 서비스 진입'],
    [1,'','인사 나누기 – 캐릭터와 관계 형성','- 캐릭터가 먼저 인사하며 음성 대화 시작 유도','- 별도 학습 안내 없이 캐릭터의 반응으로 대화 방식 전달'],
    [2,'','서로 알아가기 – 대화형 정보 수집','- 입력 폼 대신 캐릭터와의 대화로 이름 수집','- 이름을 부르며 개인적인 첫 관계 형성'],
    [3,'','목표 찾기','- 대화를 통해 영어 학습 목적 파악','- 음성 응답이 어려운 경우 선택지로 대체 가능'],
@@ -39,7 +39,7 @@
      if((page===4&&index===0)||(page===5&&index===3)){const label=document.createElement('span');label.textContent='Tap';arrow.appendChild(label);}
      card.appendChild(arrow);
     }
-    if((page===4&&index===0)||(page===5&&(index===1||index===3))){touch=document.createElement('span');touch.className='doc-touch-indicator';touch.setAttribute('aria-hidden','true');viewport.appendChild(touch);}
+    if(page===4&&index===0){touch=document.createElement('span');touch.className='doc-touch-indicator';touch.setAttribute('aria-hidden','true');viewport.appendChild(touch);}
    }
    const resize=()=>{
     frame.style.transform=`scale(${viewport.clientWidth/393})`;

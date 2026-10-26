@@ -1,0 +1,10 @@
+/* White cover with the original entry button styles from index.html. */
+.intro-cover{background:#fff!important}
+.cover-ball-layer{display:block!important}
+.cover-ball{border-radius:50%;background:transparent;box-shadow:0 9px 18px rgba(0,0,0,.12);overflow:hidden}
+.cover-ball.is-held{cursor:grabbing}
+.intro-cover.physics-active .intro-title{mix-blend-mode:normal!important}
+.intro-cover .intro-title .intro-line:first-child,
+.intro-cover .intro-title .intro-line:first-child .glyph,
+.intro-cover.physics-active .intro-title .intro-line .glyph{color:#000!important;-webkit-text-fill-color:#000!important;background:none!important}
+.cover-ball.cover-fur-ball{overflow:visible;background:none;border-radius:0;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none}

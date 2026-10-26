@@ -1,7 +1,7 @@
 /* Hold-to-talk greeting with real interim transcription and deterministic replies. */
 (() => {
   class GreetingVoice {
-    constructor({button,character,screen,fallback,onReply,onContinue,onHint,lang='ko-KR',preserveTitle=false,idleCueEnabled=true,onBeforeListen=()=>{},listeningTitle='듣고 있어요\n편하게 말해주세요.'}){
+    constructor({button,character,screen,fallback,onReply,onContinue,onHint,lang='ko-KR',preserveTitle=false,idleCueEnabled=true,onBeforeListen=()=>{},listeningTitle='듣고 있어요\n편하게 말해 주세요'}){
       Object.assign(this,{button,character,screen,fallback,onReply,onContinue,onHint,lang,preserveTitle,idleCueEnabled,onBeforeListen,listeningTitle});
       this.held=false;this.disposed=false;this.busy=false;this.transcript='';this.base='';this.recognition=null;this.timers=[];this.originalSrc=character.src;this.hasUsedMicrophone=!!window.montalkMicUsed;
       this.stage=character.closest('.stage');this.title=screen.querySelector('.copy h2');this.defaultTitle=this.title?.textContent||'';
@@ -23,8 +23,8 @@
     showNotHeard(){
       this.leaveIdle();this.restore();this.neutralSrc=this.originalSrc;
       this.character.src='img/sad.png';this.screen.classList.add('speech-missed');
-      if(this.title){this.title.classList.remove('speech-target');this.title.textContent='잘 듣지 못했어요.\n다시 한 번 말해줄래요';this.title.setAttribute('aria-live','polite')}
-      this.onHint('꾹 누르고 친구에게 인사해보세요');this.armIdle();
+      if(this.title){this.title.classList.remove('speech-target');this.title.textContent='잘 못 들었어\n다시 한 번 말해줄래?';this.title.setAttribute('aria-live','polite')}
+      this.onHint('꾹 누르고 친구에게 인사해 보세요');this.armIdle();
     }
     armIdle(){
       clearTimeout(this.idleTimer);
@@ -62,7 +62,7 @@
       this.onBeforeListen();
       if(this.preserveTitle&&this.title){this.title.classList.add('speech-target');this.preparePrompt()}
       else if(this.title)this.title.textContent=this.listeningTitle;this.screen.classList.add('greeting-recording');
-      this.onHint('꾹 누르고 친구에게 인사해보세요');
+      this.onHint('꾹 누르고 친구에게 인사해 보세요');
     }
     startRecognition(SR){
       if(this.disposed||!this.held)return;
@@ -131,11 +131,11 @@
       if(!this.transcript.trim()){this.finishing=false;this.showNotHeard();return}
       this.busy=true;this.screen.classList.remove('speech-missed');this.restore();this.button.disabled=true;this.onHint('반가운 인사를 나눴어요');
       const text=this.transcript;
-      const reply=/이름/.test(text)?'내 이름은 몬톡이야!\n만나서 반가워.':/안녕|반가/.test(text)?'반가워!\n네 목소리를 들으니 정말 좋아.':'인사해 줘서 고마워!\n우리 친하게 지내자.';
+      const reply=/이름/.test(text)?'내 이름은 몬톡이야!\n만나서 반가워.':/안녕|반가/.test(text)?'반가워!\n네 목소리를 들으니 정말 좋아':'인사해 줘서 고마워!\n우리 친하게 지내자';
       this.later(()=>{this.onReply(reply,text);this.later(()=>this.onContinue(text),3500)},420);
     }
     cancelHold(){
-      if(!this.held)return;this.held=false;this.failed=true;this.restore();try{this.recognition?.abort()}catch{}this.write('');this.onHint('꾹 누르고 친구에게 인사해보세요');this.armIdle();
+      if(!this.held)return;this.held=false;this.failed=true;this.restore();try{this.recognition?.abort()}catch{}this.write('');this.onHint('꾹 누르고 친구에게 인사해 보세요');this.armIdle();
     }
     dispose(){
       this.disposed=true;clearTimeout(this.idleTimer);this.leaveIdle();this.screen.removeEventListener('pointerdown',this.activity);this.screen.removeEventListener('keydown',this.activity);this.held=false;this.timers.forEach(clearTimeout);try{this.recognition?.abort()}catch{}this.restore();

@@ -34,15 +34,129 @@
     const speed=(b.vx-a.vx)*nx+(b.vy-a.vy)*ny;
     if(speed<0){const impulse=-(1+.62)*speed/total;a.vx-=impulse*nx*ia;a.vy-=impulse*ny*ia;b.vx+=impulse*nx*ib;b.vy+=impulse*ny*ib;}
   }
-  const furLetters = ['N','A','V','E','R'];
+  let sphereFrames=null;
+  const sphereFrameCache=new Map();
+  function buildSphereFrames(letter=''){
+    if(sphereFrameCache.has(letter))return sphereFrameCache.get(letter);
+    const frameCount=letter?32:96;
+    const size=160,texture=document.createElement('canvas');texture.width=1024;texture.height=512;
+    const ctx=texture.getContext('2d',{willReadFrequently:true});ctx.fillStyle='#fff';ctx.fillRect(0,0,1024,512);
+    ctx.fillStyle='#151515';ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.font='500 58px "IBM Plex Sans",sans-serif';
+    if(letter){
+      // Latitude bands become circular arcs after spherical projection.
+      ctx.strokeStyle='#e4e4e6';ctx.lineWidth=2;
+      for(const y of [164,348]){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(1024,y);ctx.stroke();}
+      ctx.fillStyle='#151515';ctx.font='500 220px "IBM Plex Mono",monospace';ctx.fillText(letter,512,256);
+    }else for(const x of [256,768]){ctx.fillText('Naver Healthcare',x,216,480);ctx.fillText('UX Design',x,286,460);}
+    const pixels=ctx.getImageData(0,0,1024,512).data;const frames=[];
+    for(let frame=0;frame<frameCount;frame++){
+      const canvas=document.createElement('canvas');canvas.width=canvas.height=size;
+      const context=canvas.getContext('2d'),image=context.createImageData(size,size),out=image.data;
+      for(let y=0;y<size;y++)for(let x=0;x<size;x++){
+        const nx=(x+.5-size/2)/(size/2),ny=(y+.5-size/2)/(size/2),r2=nx*nx+ny*ny;
+        if(r2>=1)continue;
+        const z=Math.sqrt(1-r2),longitude=Math.atan2(nx,z),latitude=Math.asin(ny);
+        const u=((longitude/(Math.PI*2)+frame/frameCount+.5)%1+1)%1;
+        const v=.5+latitude/Math.PI;
+        const tone=pixels[(Math.min(511,Math.floor(v*512))*1024+Math.floor(u*1024))*4]/255;
+        const light=Math.max(0,-nx*.35-ny*.45+z*.82);
+        const shade=.81+.19*light,i=(y*size+x)*4;
+        for(let channel=0;channel<3;channel++)out[i+channel]=[255,255,255][channel]*shade*(.11+.89*tone);
+        out[i+3]=Math.round(Math.min(1,(1-Math.sqrt(r2))*size/1.3)*255);
+      }
+      context.putImageData(image,0,0);frames.push(canvas);
+    }
+    sphereFrameCache.set(letter,frames);return frames;
+  }
+  function decorateSphere(element,index){
+    const canvas=document.createElement('canvas');canvas.width=canvas.height=160;canvas.style.cssText='display:block;width:100%;height:100%;pointer-events:none';
+    element.appendChild(canvas);element._sphereContext=canvas.getContext('2d');element._spherePhase=index*7;
+  }
   function decorateFur(element,index){
     const image=document.createElement('img');
-    image.src=`img/text_${furLetters[index%furLetters.length]}.png`;
-    image.alt='';image.draggable=false;image.decoding='async';
-    // The artwork includes transparent margins; let the fur reach the collision edge.
+    image.src=`img/text_${['N','A','V','E','R'][index%5]}.png`;image.alt='';image.draggable=false;image.decoding='async';
     image.style.cssText='position:absolute;left:-12.5%;top:-12.5%;width:125%;height:125%;max-width:none;object-fit:contain;pointer-events:none;user-select:none';
-    element.style.background='none';element.style.borderRadius='0';
-    element.appendChild(image);
+    element.appendChild(image);element.classList.add('cover-fur-ball');
+  }
+  function decorateApple(element){
+    const image=document.createElement('img');image.src='img/apple.png';image.alt='';image.draggable=false;image.decoding='async';
+    image.style.cssText='display:block;width:100%;height:100%;object-fit:contain;pointer-events:none;user-select:none';
+    element.appendChild(image);element.classList.add('cover-apple-ball');
+  }
+  const beadPalette=['#42ba79','#9cdb67','#25a99d','#6fcdea','#8399e5','#eab971','#e991ad','#b8d592'];
+  function createBeads(index){
+    const beads=[];
+    for(let i=0;i<7+index%2;i++){
+      const r=.12+Math.random()*.1;let x=0,y=0;
+      for(let attempt=0;attempt<100;attempt++){
+        x=(Math.random()-.5)*1.5;y=(Math.random()-.5)*1.5;
+        if(Math.hypot(x,y)<.9-r&&beads.every(b=>Math.hypot(x-b.x,y-b.y)>r+b.r+.025))break;
+      }
+      beads.push({x,y,r,vx:(Math.random()-.5)*1.2,vy:(Math.random()-.5)*1.2,color:beadPalette[i],depth:Math.random()});
+    }
+    return beads;
+  }
+  function stepBeads(ball,dt){
+    const dvx=ball.vx-(ball.beadOuterVx??ball.vx),dvy=ball.vy-(ball.beadOuterVy??ball.vy);
+    ball.beadOuterVx=ball.vx;ball.beadOuterVy=ball.vy;
+    for(const b of ball.beads){
+      b.vx=clamp(b.vx-dvx/ball.r*.55,-12,12);b.vy=clamp(b.vy-dvy/ball.r*.55+2.4*dt,-12,12);
+      const drag=Math.exp(-.65*dt);b.vx*=drag;b.vy*=drag;b.x+=b.vx*dt;b.y+=b.vy*dt;
+    }
+    for(let pass=0;pass<3;pass++){
+      for(let i=0;i<ball.beads.length;i++)for(let j=i+1;j<ball.beads.length;j++){
+        const a=ball.beads[i],b=ball.beads[j],dx=b.x-a.x,dy=b.y-a.y,d=Math.hypot(dx,dy),min=a.r+b.r;
+        if(d>=min)continue;const nx=d>1e-5?dx/d:1,ny=d>1e-5?dy/d:0;
+        const overlap=(min-d)/2;a.x-=nx*overlap;a.y-=ny*overlap;b.x+=nx*overlap;b.y+=ny*overlap;
+        const speed=(b.vx-a.vx)*nx+(b.vy-a.vy)*ny;
+        if(speed<0){a.vx+=.8*speed*nx;a.vy+=.8*speed*ny;b.vx-=.8*speed*nx;b.vy-=.8*speed*ny;}
+      }
+      for(const b of ball.beads){
+        const d=Math.hypot(b.x,b.y),limit=.91-b.r;
+        if(d>limit){const nx=b.x/d,ny=b.y/d;b.x=nx*limit;b.y=ny*limit;const speed=b.vx*nx+b.vy*ny;if(speed>0){b.vx-=1.65*speed*nx;b.vy-=1.65*speed*ny;}}
+      }
+    }
+  }
+  const beadSprites=new Map();
+  function shadedBead(color){
+    if(beadSprites.has(color))return beadSprites.get(color);
+    const size=80,canvas=document.createElement('canvas');canvas.width=canvas.height=size;
+    const ctx=canvas.getContext('2d'),image=ctx.createImageData(size,size),data=image.data;
+    const rgb=color.match(/[a-f0-9]{2}/gi).map(v=>parseInt(v,16));
+    for(let y=0;y<size;y++)for(let x=0;x<size;x++){
+      const nx=(x+.5-40)/39,ny=(y+.5-40)/39,r2=nx*nx+ny*ny;if(r2>=1)continue;
+      const nz=Math.sqrt(1-r2),diffuse=Math.max(0,-nx*.44-ny*.55+nz*.71);
+      const highlight=Math.pow(Math.max(0,-nx*.24-ny*.3+nz*.923),26);
+      const reflection=Math.pow(Math.max(0,nx*.65+ny*.35+nz*.67),9)*.22;
+      const rim=Math.pow(1-nz,3)*.2;
+      const i=(y*size+x)*4;
+      for(let c=0;c<3;c++)data[i+c]=Math.min(255,rgb[c]*(.24+.76*diffuse)+highlight*180+reflection*[115,160,210][c]+rim*65);
+      data[i+3]=Math.round(Math.min(1,(1-Math.sqrt(r2))*40)*255);
+    }
+    ctx.putImageData(image,0,0);beadSprites.set(color,canvas);return canvas;
+  }
+  function drawGlass(ball){
+    const ctx=ball.element._sphereContext;
+    if(!ball.glassInterior){ball.glassInterior=document.createElement('canvas');ball.glassInterior.width=ball.glassInterior.height=160;ball.glassInteriorContext=ball.glassInterior.getContext('2d');}
+    const inside=ball.glassInteriorContext;inside.clearRect(0,0,160,160);
+    for(const b of [...ball.beads].sort((a,b)=>a.depth-b.depth)){
+      const depthScale=.8+b.depth*.25,r=b.r*76*depthScale;
+      // A gentle lens magnification and depth blur replace the flat colored discs.
+      const x=80+b.x*76*1.025,y=80+b.y*76*1.025;
+      inside.save();inside.globalAlpha=.76+b.depth*.2;inside.filter=`blur(${1.1+(1-b.depth)*2.2}px)`;
+      inside.drawImage(shadedBead(b.color),x-r,y-r,r*2,r*2);inside.restore();
+    }
+    ctx.clearRect(0,0,160,160);ctx.save();ctx.beginPath();ctx.arc(80,80,76,0,Math.PI*2);ctx.clip();
+    const base=ctx.createRadialGradient(52,43,3,80,80,76);base.addColorStop(0,'rgba(255,255,255,.42)');base.addColorStop(.7,'rgba(238,248,248,.2)');base.addColorStop(1,'rgba(167,195,203,.4)');ctx.fillStyle=base;ctx.fillRect(0,0,160,160);
+    ctx.save();ctx.filter='blur(1px)';ctx.drawImage(ball.glassInterior,0,0);ctx.restore();
+    // Frosted transmission: soften the contents while keeping the outer lens crisp.
+    const frost=ctx.createRadialGradient(55,48,5,80,80,82);frost.addColorStop(0,'rgba(255,255,255,.1)');frost.addColorStop(.72,'rgba(248,252,255,.13)');frost.addColorStop(1,'rgba(222,241,247,.5)');ctx.fillStyle=frost;ctx.fillRect(0,0,160,160);
+    const edge=ctx.createRadialGradient(80,80,55,80,80,76);edge.addColorStop(0,'rgba(255,255,255,0)');edge.addColorStop(.78,'rgba(255,255,255,.12)');edge.addColorStop(1,'rgba(255,255,255,.85)');ctx.fillStyle=edge;ctx.fillRect(0,0,160,160);
+    // Broad studio softbox reflection, rather than a drawn white ring.
+    ctx.save();ctx.translate(49,38);ctx.rotate(-.65);ctx.scale(1,.48);
+    const softbox=ctx.createRadialGradient(0,0,1,0,0,38);softbox.addColorStop(0,'rgba(255,255,255,.72)');softbox.addColorStop(.5,'rgba(255,255,255,.28)');softbox.addColorStop(1,'rgba(255,255,255,0)');ctx.fillStyle=softbox;ctx.fillRect(-40,-40,80,80);ctx.restore();
+    ctx.lineWidth=.8;ctx.strokeStyle='rgba(255,255,255,.64)';ctx.beginPath();ctx.arc(80,80,75.2,0,Math.PI*2);ctx.stroke();ctx.restore();
   }
   class CoverPhysics {
     constructor(cover,button){this.cover=cover;this.button=button;this.balls=[];this.polygons=[];this.raf=0;this.running=false;this.drag=null;this.lastPointer=null;this.onResize=()=>this.resize();this.onMove=e=>this.pointerMove(e);this.onUp=e=>this.release(e);}
@@ -51,10 +165,11 @@
       this.layer=document.createElement('div');this.layer.className='cover-ball-layer';this.layer.setAttribute('aria-hidden','true');this.cover.appendChild(this.layer);
       this.cover.classList.add('physics-active');
       this.running=true;this.elapsed=0;this.last=0;this.accumulator=0;this.resize();
-      const diameter=(this.button.getBoundingClientRect().width||120)*1.6;
-      for(let i=0;i<furLetters.length*3;i++){
-        const element=document.createElement('span');element.className='cover-ball';decorateFur(element,i);element.style.width=element.style.height=diameter+'px';element.style.visibility='hidden';this.layer.appendChild(element);
-        const r=diameter/2;const ball={x:r+Math.random()*Math.max(1,this.width-diameter),y:-r-30,vx:(Math.random()-.35)*190,vy:0,r,angle:0,held:false,active:false,delay:i*.18,element};
+      sphereFrames=buildSphereFrames();
+      const diameter=Math.max(88,Math.min(160,this.width*.085));
+      for(let i=0;i<16;i++){
+        const element=document.createElement('span');element.className='cover-ball';const kind=i===0?'type':'fur';if(kind==='type')decorateSphere(element,i);else decorateFur(element,i-1);const ballDiameter=diameter;element.style.width=element.style.height=ballDiameter+'px';element.style.visibility='hidden';this.layer.appendChild(element);
+        const r=ballDiameter/2;const ball={x:r+Math.random()*Math.max(1,this.width-ballDiameter),y:-r-30,vx:(Math.random()-.35)*190,vy:0,r,angle:0,held:false,active:false,delay:i*.12,element,kind};
         element.addEventListener('pointerdown',e=>this.grab(e,ball));element.addEventListener('lostpointercapture',e=>this.release(e));element.addEventListener('dragstart',e=>e.preventDefault());this.balls.push(ball);
       }
       window.addEventListener('resize',this.onResize);this.cover.addEventListener('pointermove',this.onMove);this.cover.addEventListener('pointerup',this.onUp);this.cover.addEventListener('pointercancel',this.onUp);
@@ -110,13 +225,20 @@
         }
         for(let i=0;i<active.length;i++)for(let j=i+1;j<active.length;j++)collidePair(active[i],active[j]);
       }
+      for(const b of active)if(b.beads)stepBeads(b,dt);
     }
     frame(time){
       if(!this.running)return;const dt=this.last?Math.min((time-this.last)/1000,.04):0;this.last=time;this.elapsed+=dt;
       this.updateTextColliders();
       for(const b of this.balls)if(!b.active&&this.elapsed>=b.delay){b.active=true;b.element.style.visibility='visible';}
       this.accumulator+=dt;while(this.accumulator>=1/120){this.step(1/120);this.accumulator-=1/120;}
-      for(const b of this.balls)if(b.active)b.element.style.transform=`translate3d(${b.x-b.r}px,${b.y-b.r}px,0) rotate(${b.angle}rad)`;
+      for(const b of this.balls)if(b.active){
+        b.element.style.transform=`translate3d(${b.x-b.r}px,${b.y-b.r}px,0) rotate(${b.kind!=='type'?b.angle:b.angle*.12}rad)`;
+        if(b.kind!=='type')continue;
+        const frames=b.kind==='letter'?b.element._letterFrames:sphereFrames;
+        const phase=b.kind==='letter'?((Math.floor(b.angle/(Math.PI*2)*frames.length)%frames.length)+frames.length)%frames.length:(Math.floor(this.elapsed*16)+b.element._spherePhase)%frames.length;
+        if(phase!==b.sphereFrame){const ctx=b.element._sphereContext;ctx.clearRect(0,0,160,160);ctx.drawImage(frames[phase],0,0);b.sphereFrame=phase;}
+      }
       this.raf=requestAnimationFrame(t=>this.frame(t));
     }
     position(event){const box=this.cover.getBoundingClientRect();return {x:event.clientX-box.left,y:event.clientY-box.top,time:performance.now()};}
@@ -141,6 +263,6 @@
       this.glyphs=[];this.running=false;cancelAnimationFrame(this.raf);window.removeEventListener('resize',this.onResize);this.cover.removeEventListener('pointermove',this.onMove);this.cover.removeEventListener('pointerup',this.onUp);this.cover.removeEventListener('pointercancel',this.onUp);this.drag=null;this.layer?.remove();this.layer=null;this.balls=[];
     }
   }
-  if(typeof module!=='undefined'&&module.exports)module.exports={hull,circlePolygon,collidePair,CoverPhysics,decorateFur};
+  if(typeof module!=='undefined'&&module.exports)module.exports={hull,circlePolygon,collidePair,CoverPhysics,decorateSphere,createBeads,stepBeads};
   if(typeof window!=='undefined')window.CoverPhysics=CoverPhysics;
 })();
