@@ -1,0 +1,59 @@
+.theme-toggle{position:fixed;right:clamp(24px,4.2vw,84px);top:63px;width:50px;height:50px;display:grid;place-items:center;padding:0;border:1px solid #e5e5e9;border-radius:50%;background:#fff;color:#25262b;z-index:51;cursor:pointer;transition:background .25s,color .25s,box-shadow .25s}
+.theme-toggle:hover{box-shadow:0 4px 18px #12182418}
+.theme-toggle svg{width:23px;height:23px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.theme-toggle .theme-moon{display:none}
+body.intro-playing .theme-toggle,body.doc-screen-preview .theme-toggle{display:none}
+html[data-theme="night"]{color-scheme:dark;--onboarding-gradient:linear-gradient(180deg,#141416 0%,#1c1c1e 55%,#1c1c1e 100%)}
+html[data-theme="night"],html[data-theme="night"] body,html[data-theme="night"] .layout{background:#101012!important}
+html[data-theme="night"] .theme-toggle{background:#2c2c2e;border-color:#48484a;color:#f5f5f7}
+html[data-theme="night"] .theme-sun{display:none}
+html[data-theme="night"] .theme-moon{display:block}
+html[data-theme="night"] .page-brand,html[data-theme="night"] .side h1,html[data-theme="night"] .side .eyebrow{color:#f5f5f7!important}
+html[data-theme="night"] .side p,html[data-theme="night"] .prototype-note p{color:#b8b8c0!important}
+html[data-theme="night"] .prototype-note-line{background:#636366!important;border-color:#636366!important}
+html[data-theme="night"] .chapter-nav::before{background:#38383a!important}
+html[data-theme="night"] .chapter-step span{background:#242426!important;border-color:#48484a!important;color:#f5f5f7!important}
+html[data-theme="night"] .chapter-step.active span,html[data-theme="night"] .chapter-step.active:hover span{background:#f5f5f7!important;border-color:#f5f5f7!important;color:#1c1c1e!important}
+html[data-theme="night"] .chapter-step:not(.active):hover span{background:#3a3a3c!important;color:#fff!important}
+html[data-theme="night"] .layout>.view-switch{background:#2c2c2e!important}
+html[data-theme="night"] .layout>.view-switch .switch-btn{color:#b8b8c0!important}
+html[data-theme="night"] .layout>.view-switch .switch-btn.active{color:#1c1c1e!important}
+html[data-theme="night"] .layout>.view-switch .switch-indicator{background:#f5f5f7!important}
+html[data-theme="night"] .phone,html[data-theme="night"] .phone .launch-splash{background:var(--onboarding-gradient)!important}
+html[data-theme="night"] .phone .screen[data-step]{background:radial-gradient(ellipse 110% 65% at 50% 0,rgba(57,65,81,.35),transparent),var(--onboarding-gradient)!important}
+html[data-theme="night"] .phone .copy h2{color:#f5f5f7!important}
+html[data-theme="night"] .phone .copy p,html[data-theme="night"] .phone .hint{color:#b8b8c0!important}
+html[data-theme="night"] .phone .app-cloud{filter:brightness(.55) saturate(.65) hue-rotate(15deg);opacity:.65}
+html[data-theme="night"] .phone .nature{filter:brightness(.7) saturate(.8)}
+html[data-theme="night"] .phone .topbar .back,html[data-theme="night"] .phone .topbar .skip,html[data-theme="night"] .phone .choices .pill,html[data-theme="night"] .phone .replay-question,html[data-theme="night"] .phone .home-points{background:#2c2c2e!important;border-color:#48484a!important;color:#f5f5f7!important}
+html[data-theme="night"] .phone .choices .pill:hover{background:#3a3a3c!important;color:#fff!important}
+html[data-theme="night"] .phone .primary{background:#f5f5f7!important;color:#1c1c1e!important}
+html[data-theme="night"] .doc-count{color:#b8b8c0!important}
+html[data-theme="night"] .document-view .doc-nav button{background:#2c2c2e!important;color:#f5f5f7!important}
+@media(max-width:850px){.theme-toggle{width:40px;height:40px;right:14px;top:8px}.theme-toggle svg{width:21px;height:21px}html[data-theme="night"] body.doc-mode .doc-heading{background:#101012ed!important}}
+@media(prefers-reduced-motion:reduce){.theme-toggle{transition:none}}
+
+/* Explicit descendant colors override the daylight title spans as well. */
+html[data-theme="night"] body .phone .screen .copy h2,
+html[data-theme="night"] body .phone .screen .copy h2 span,
+html[data-theme="night"] body .phone .screen .homehead h2{color:#f5f5f7!important;-webkit-text-fill-color:#f5f5f7!important}
+html[data-theme="night"] body .phone .screen .copy h2 .spoken-match{color:#64d2b8!important;-webkit-text-fill-color:#64d2b8!important}
+html[data-theme="night"] body .side .side-description p,
+html[data-theme="night"] body .side .feature-list li{color:#b8b8c0!important}
+html[data-theme="night"] .phone .scene-speech-bubble{background:#3a3a3c;color:#f5f5f7}
+html[data-theme="night"] .phone .scene-speech-bubble::after{border-top-color:#3a3a3c}
+html[data-theme="night"] .phone .home-profile{background:#2c2c2e;color:#f5f5f7}
+html[data-theme="night"] .phone .home-profile p{color:#b8b8c0}
+html[data-theme="night"] .phone .inputrow{background:#2c2c2e;border-color:#48484a}
+html[data-theme="night"] .phone .inputrow input{color:#f5f5f7}
+html[data-theme="night"] .phone .secondary,html[data-theme="night"] .phone .profile-close{color:#b8b8c0}
+html[data-theme="night"] .phone .app-cloud{filter:brightness(.38) saturate(.35);opacity:.45}
+html[data-theme="night"] .phone .nature{filter:brightness(.58) saturate(.7)}
+html[data-theme="night"] .phone .character,html[data-theme="night"] .phone .egg{filter:brightness(.88) saturate(.9)}
+
+/* The opening screen uses an ID-based daylight rule. Match it explicitly. */
+html[data-theme="night"] body .phone:has(#egg) .screen,
+html[data-theme="night"] body .phone #screen[data-step]{background:radial-gradient(ellipse 110% 65% at 50% 0,rgba(57,65,81,.35),transparent),var(--onboarding-gradient)!important}
+html[data-theme="night"] body .phone .topbar .back:hover,
+html[data-theme="night"] body .phone .topbar .skip:hover{background:#3a3a3c!important;color:#f5f5f7!important}
+html[data-theme="night"] body .phone .screen:is([data-step="3"],[data-step="4"]) .choices .pill:hover{background:#48484a!important;color:#fff!important}
