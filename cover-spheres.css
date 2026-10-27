@@ -1,5 +1,5 @@
 /* White cover with the original entry button styles from index.html. */
-.intro-cover{background:#fff!important}
+.intro-cover{background:#eceaeb!important}
 .cover-ball-layer{display:block!important}
 .cover-ball{border-radius:50%;background:transparent;box-shadow:0 9px 18px rgba(0,0,0,.12);overflow:hidden}
 .cover-ball.is-held{cursor:grabbing}

@@ -106,7 +106,7 @@
       const delay=Math.max(0,this.laneUntil[lane]-now),duration=Math.max(10000,text.length*400);
       this.laneUntil[lane]=now+delay+duration+300;
       span.style.top=(lane*45)+'px';
-      span.style.setProperty?.('--speech-start',(this.stage.clientWidth||393)+'px');
+      span.style.setProperty?.('--speech-start',Math.max(0,(this.stage.clientWidth||393)-30)+'px');
       span.style.animationDuration=duration+'ms';span.style.animationDelay=delay+'ms';
       this.speechSegments.set(key,span);this.track.appendChild(span);this.ticker.classList.add('has-text');
       this.later(()=>{span.remove();if(!this.track.children.length)this.ticker.classList.remove('has-text')},delay+duration);

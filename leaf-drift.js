@@ -1,4 +1,4 @@
-/* Quiet wind-blown leaves, only on the egg scene and home. */
+/* Quiet wind-blown leaves, only on the egg scene. */
 (()=>{
  const host=document.getElementById('screen');if(!host||new URLSearchParams(location.search).has('docPreview'))return;
  let layer=null,frame=0,items=[],next=0,last=0;
@@ -26,7 +26,7 @@
   });frame=requestAnimationFrame(tick);
  }
  function sync(){
-  const enabled=['0','7'].includes(host.dataset.step)&&!reduced.matches;
+  const enabled=host.dataset.step==='0'&&!reduced.matches;
   if(!enabled){if(layer)stop();return}
   if(layer?.isConnected)return;stop();layer=document.createElement('div');layer.className='leaf-drift';layer.setAttribute('aria-hidden','true');host.appendChild(layer);next=performance.now()+500+Math.random()*1700;frame=requestAnimationFrame(tick);
  }

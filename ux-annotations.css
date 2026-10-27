@@ -1,0 +1,25 @@
+/* Restore the original outside-device note geometry, type and reveal motion. */
+body .center-wrap .prototype-note{display:none!important}
+.ux-annotations{display:none;position:absolute;inset:0;pointer-events:none;z-index:10;font-family:'Pretendard',sans-serif;color:#242424}
+.ux-annotations[hidden]{display:none!important}
+.ux-annotation{position:absolute;left:calc(100% + 36px);width:min(340px,calc(50vw - 250px))}
+.ux-annotation-line{display:block;height:1px;width:100%;background:#242424;transform:scaleX(0);transform-origin:left center}
+.ux-annotation-label{position:relative;margin-top:12px;width:100%;text-align:right;font-size:calc(17px + 2pt);font-weight:400;line-height:1.55;color:inherit;opacity:0;transform:translateY(14px)}
+.ux-annotation-label strong{display:block;font:inherit;font-weight:600;word-break:keep-all}
+.ux-annotation-label p{margin:6px 0 0;font:inherit;white-space:pre-line;word-break:keep-all;color:inherit}
+html[data-theme="night"] .ux-annotations{color:#c9d2df}
+html[data-theme="night"] .ux-annotation-line{background:#8190a5}
+@media(min-width:1401px){body:not(.doc-mode):not(.character-mode):not(.intro-playing) .ux-annotations{display:block}}
+@media(min-width:1401px) and (prefers-reduced-motion:no-preference){
+ .ux-annotation-line{animation:note-line-reveal .7s cubic-bezier(.22,1,.36,1) var(--note-delay,0s) both}
+ .ux-annotation-label{animation:description-rise .75s cubic-bezier(.22,1,.36,1) calc(var(--note-delay,0s) + .4s) both}
+}
+@media(prefers-reduced-motion:reduce){.ux-annotation-line{animation:none;transform:scaleX(1)}.ux-annotation-label{animation:none;opacity:1;transform:none}}
+
+.ux-annotation[hidden]{display:none!important}
+
+/* Offset phone titles and their bubbles together, without changing their motion. */
+.phone .screen .copy{translate:0 20px!important}
+.phone .screen :is(.idle-speech-bubble,.scene-speech-bubble){translate:0 20px!important}
+@keyframes spoken-from-right{0%{transform:translateX(var(--speech-start,363px));opacity:0}6%{opacity:1}92%{opacity:1}100%{transform:translateX(-100%);opacity:0}}
+@media(prefers-reduced-motion:reduce){.phone .screen .greeting-transcript-track span{animation:none!important;transform:none;opacity:1}}

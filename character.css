@@ -3,7 +3,7 @@
 html[data-theme="night"] .device-status-bar{filter:brightness(0) invert(1)}
 html[data-theme="night"] body .phone #egg{filter:brightness(.72) saturate(.8)!important}
 .character-view[hidden]{display:none!important}
-.character-view{--char-ink:#1d1d1f;--char-secondary:#6e6e73;--char-card:#fff;position:fixed;inset:130px 0 0;z-index:20;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;color:var(--char-ink);background:#f6f5f8;font-family:'Pretendard',sans-serif;scrollbar-width:thin;scrollbar-color:#9996 transparent;scroll-padding-top:50px}
+.character-view{--char-ink:#1d1d1f;--char-secondary:#6e6e73;--char-card:#fff;position:fixed;inset:130px 0 0;z-index:20;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;color:var(--char-ink);background:#eceaeb;font-family:'Pretendard',sans-serif;scrollbar-width:thin;scrollbar-color:#9996 transparent;scroll-padding-top:50px}
 body.character-mode .center-wrap,body.character-mode .side{visibility:hidden!important;pointer-events:none;opacity:0!important}
 body.character-mode .layout{height:100dvh!important;min-height:100dvh!important;overflow:hidden!important}
 body.character-mode .page-brand{z-index:40}
@@ -90,7 +90,7 @@ html[data-theme="night"] .character-hero-art>img:not([aria-hidden]){filter:brigh
 .character-progress{display:none!important}
 .character-view{inset:0;scroll-padding-top:170px}
 .character-content{padding-top:150px}
-body.character-mode::before{content:'';position:fixed;inset:0 0 auto;height:170px;z-index:35;pointer-events:none;background:linear-gradient(to bottom,rgba(246,245,248,.9),rgba(246,245,248,.46) 70%,rgba(246,245,248,0));-webkit-backdrop-filter:blur(22px) saturate(1.15);backdrop-filter:blur(22px) saturate(1.15);-webkit-mask-image:linear-gradient(#000 0%,#000 60%,transparent 100%);mask-image:linear-gradient(#000 0%,#000 60%,transparent 100%)}
+body.character-mode::before{content:'';position:fixed;inset:0 0 auto;height:170px;z-index:35;pointer-events:none;background:linear-gradient(to bottom,rgba(236,234,235,.9),rgba(236,234,235,.46) 70%,rgba(236,234,235,0));-webkit-backdrop-filter:blur(22px) saturate(1.15);backdrop-filter:blur(22px) saturate(1.15);-webkit-mask-image:linear-gradient(#000 0%,#000 60%,transparent 100%);mask-image:linear-gradient(#000 0%,#000 60%,transparent 100%)}
 html[data-theme="night"] body.character-mode::before{background:linear-gradient(to bottom,rgba(16,16,18,.93),rgba(16,16,18,.5) 70%,rgba(16,16,18,0))}
 .character-studio-sticky{top:160px}
 .phone .topbar .back svg{stroke-linecap:round;stroke-linejoin:round}
@@ -185,3 +185,10 @@ html[data-theme="night"] .character-study-notes article>span,html[data-theme="ni
 body.doc-screen-preview .preview-button-touch{position:absolute;width:86px;height:86px;border:2px solid #fff;border-radius:50%;background:rgba(255,255,255,.3);transform:translate(-50%,-50%);pointer-events:none;z-index:60;box-sizing:border-box}
 /* Place the feet within the meadow instead of along its front edge. */
 .character-hero-art>img:not([aria-hidden]){top:-7%!important}
+
+/* A soft contact shadow plants the hero's feet in the meadow. */
+.character-hero-art::after{content:'';position:absolute;z-index:1;pointer-events:none;left:50%;top:85%;width:33%;height:3%;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(ellipse,rgba(31,48,42,.27) 0%,rgba(31,48,42,.12) 42%,transparent 74%);filter:blur(3px)}
+html[data-theme="night"] .character-hero-art::after{opacity:.8;background:radial-gradient(ellipse,rgba(0,0,0,.65),transparent 74%)}
+
+.character-name-equation .character-name-wordmark{display:block;width:min(760px,85%);height:auto;object-fit:contain;margin:auto}
+@media(max-width:850px){.character-name-equation .character-name-wordmark{width:95%}}
